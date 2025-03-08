@@ -1,0 +1,97 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: #ffffff;
+    margin: 0;
+    padding: 56px;
+}
+
+.container {
+    width: 100%;
+    /* margin: 50px auto; */
+    background: #e8f3f0;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 24px;
+    color: #333;
+}
+
+.status {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#micButton {
+    background: #e8f3f0;
+    color: #007c7c;
+    font-size: 18px;
+    padding: 10px 20px;
+    border: 1px solid #007c7c;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+#micButton:hover {
+    background: #d8f2eb;
+}
+
+.translation-box {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    flex-direction: column;
+
+}
+
+.text-container {
+    /* width: 45%; */
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    text-align: start;
+    /* font-size: 13px; */
+}
+
+.text-container h3 {
+    margin-top: 0;
+}
+
+#history {
+    margin-top: 20px;
+    text-align: left;
+    max-height: 200px;
+    overflow-y: auto;
+    background: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+#history p {
+    margin: 5px 0;
+    padding: 5px;
+    background: #eef;
+    border-radius: 5px;
+}
+p#recognizedText {
+    font-size: 20px;
+}
+
+p#translatedText {
+    font-size: 20px;
+}
+
+.blue-text.text-darken-3 {
+    color: #0b7c7c;
+    font-weight: bold;
+}
+
+.center-align {
+    /* align-items: start; */
+}

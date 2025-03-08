@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Speech Translator</title>
+    <!-- Google Material UI & Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="static/css/materialize.css">
+    <link rel="stylesheet" href="static/css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <!-- App Title -->
+        <h4 class="center-align blue-text text-darken-2">Real-Time Speech Translator</h4>
+
+        <!-- Status Indicator -->
+        <div class="status center-align">
+            <p id="statusText" class="flow-text">Click the mic to start</p>
+        </div>
+
+        <!-- Microphone Button -->
+        <div class="center-align">
+            <button id="micButton" class="waves-effect waves-light" onclick="toggleListening()">
+                <i class="material-icons left">mic</i>
+                <span id="micButtonText">Start Listening</span>
+            </button>
+        </div>
+
+        <!-- Translation Output -->
+        <div class="translation-box">
+            <div class="text-container card-panel">
+                <h5>English</h5>
+                <p id="recognizedText" class="flow-text grey-text">...</p>
+            </div>
+            <div class="text-container card-panel">
+                <h5>French</h5>
+                <p id="translatedText" class="flow-text">...</p>
+            </div>
+        </div>
+
+        <!-- Translation History -->
+        <h5 class="blue-text text-darken-2">Translation History</h5>
+        <div id="history" class="history-container"></div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        var socket = io();
+        var isListening = false;
+
+        function toggleListening() {
+            let micButtonText = document.getElementById("micButtonText");
+            let statusText = document.getElementById("statusText");
+            let micIcon = document.querySelector("#micButton i");
+
+            if (!isListening) {
+                socket.emit('start_listening');
+                statusText.innerText = "Listening...";
+                micButtonText.innerText = "Stop Listening";
+                micIcon.innerText = "stop";
+            } else {
+                socket.emit('stop_listening');
+                statusText.innerText = "Translating...";
+                micButtonText.innerText = "Start Listening";
+                micIcon.innerText = "mic";
+            }
+            isListening = !isListening;
+        }
+
+        socket.on('status', function(data) {
+            document.getElementById("statusText").innerText = data.status.charAt(0).toUpperCase() + data.status.slice(1) + "...";
+        });
+
+        socket.on('interim_text', function(data) {
+            document.getElementById("recognizedText").innerText = data.text;
+        });
+
+        socket.on('translation_result', function(data) {
+            document.getElementById("recognizedText").innerText = data.original;
+            document.getElementById("translatedText").innerText = data.translated;
+            
+            let historyDiv = document.getElementById("history");
+            let newEntry = document.createElement("div");
+            newEntry.classList.add("history-entry", "card-panel", "white-text", "blue", "darken-2");
+            newEntry.innerHTML = `<strong>${data.original}</strong> → ${data.translated}`;
+            historyDiv.prepend(newEntry);
+        });
+    </script>
+
+    <!-- Materialize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>
